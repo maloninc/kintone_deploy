@@ -59,7 +59,8 @@ module KintoneDeploy
             else
                 begin
                     File.open(entry) do |fd|
-                        result = api.uploadFile(fd.read, entry, "text/javascript")
+                        content_type = (type = 'css' ? "text/css" : "text/javascript")
+                        result = api.uploadFile(fd.read, File.basename(entry), content_type)
                         upload_result[type].push({
                             :type => 'FILE',
                             :file => {
