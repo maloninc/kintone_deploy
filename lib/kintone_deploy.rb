@@ -12,6 +12,7 @@ module KintoneDeploy
         opt.on('-d domain',     'Domain name')      {|v| option[:d] = v}
         opt.on('-u user id',    'Account name')     {|v| option[:u] = v}
         opt.on('-p password',   'Account password') {|v| option[:p] = v}
+        opt.on('-t', 'Deploy preview environment')  {|v| option[:t] = v}
         opt.on('-b, --basic-id user id',  'Basic Auth ID')        {|v| option[:basic_id] = v}
         opt.on('-q, --basic-pw password', 'Basic Auth password')  {|v| option[:basic_pw] = v}
     end
@@ -59,7 +60,7 @@ module KintoneDeploy
             else
                 begin
                     File.open(entry) do |fd|
-                        content_type = (type = 'css' ? "text/css" : "text/javascript")
+                        content_type = (type == 'css' ? "text/css" : "text/javascript")
                         result = api.uploadFile(fd.read, File.basename(entry), content_type)
                         upload_result[type].push({
                             :type => 'FILE',
@@ -79,7 +80,7 @@ module KintoneDeploy
         end
     end
 
-    puts "[INFO] Deploying files..."
+    puts "[INFO] Deploying files into preview..."
     customize_result = api.http_request(Net::HTTP::Put, '/preview/app/customize.json', {
         :app => deploy_data['id'],
         :scope => 'ALL',
@@ -92,14 +93,17 @@ module KintoneDeploy
         }
     })
 
-    deploy_result = api.http_request(Net::HTTP::Post, '/preview/app/deploy.json', {
-        :apps => [
-            {
-                :app => deploy_data['id'],
-                :revision => customize_result['revision']
-            }
-        ]
-    })
+    if(option[:t] == nil)
+        puts "[INFO] Deploying preview to production..."
+        deploy_result = api.http_request(Net::HTTP::Post, '/preview/app/deploy.json', {
+            :apps => [
+                {
+                    :app => deploy_data['id'],
+                    :revision => customize_result['revision']
+                }
+            ]
+        })
+    end
 
     puts "[INFO] Deployment is completed."
 end
