@@ -45,6 +45,7 @@ class KintoneHTTP_API
         req = method_class.new("/k/v1/#{rec}", req_header)
         req.body = data.to_json
         res = https.request(req)
+        return res.body if rec.include?('file.json')
         result = JSON.parse(res.body)
         if result["message"] != nil
             raise "KINTONE ACCESS ERROR: #{result['message']} data:#{data.to_json}"

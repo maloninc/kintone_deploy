@@ -26,6 +26,8 @@ Usage: kintone_deploy [options]
     -d domain                        Domain name
     -u user id                       Account name
     -p password                      Account password
+    -t                               Deploy preview environment
+    -v                               Verify deployment
     -b, --basic-id user id           Basic Auth ID
     -q, --basic-pw password          Basic Auth password
 ```
