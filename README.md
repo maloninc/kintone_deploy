@@ -4,19 +4,10 @@ You can deploy those things by simple CLI.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'kintone_deploy' :git => ''
+```bash
+$ curl -s -L -O https://github.com/maloninc/kintone_deploy/raw/master/gems/kintone_deploy-x.x.x.gem
+$ gem install kintone_deploy-x.x.x.gem
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install kintone_deploy
 
 ## Usage
 
